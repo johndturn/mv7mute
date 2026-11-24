@@ -49,12 +49,6 @@
       "Bash(cargo run:*)",
       "Bash(mv7mute:*)",
       "Bash(cargo install:*)",
-      "Bash(git push:*)",
-      "Bash(git merge:*)",
-      "Bash(git rebase:*)",
-      "Bash(git reset:*)",
-      "Bash(gh pr create:*)",
-      "Bash(gh pr merge:*)",
       "Bash(gh workflow:*)",
       "Bash(gh repo:*)"
     ],

@@ -122,8 +122,9 @@ Author email must be a GitHub noreply address.
 ## Claude Code setup (`.claude/`)
 
 - `settings.json`: allows build/test/lint, `br`, `bv --robot-*`, read-only git/gh; **asks** before running the
-  binary, `cargo run`/`install`, pushes, merges, PR creation and `gh workflow`/`gh repo`; **denies**
-  `cargo publish`, pushes to `upstream`, force pushes.
+  binary, `cargo run`/`install` and `gh workflow`/`gh repo`; **denies** `cargo publish`, pushes to `upstream`,
+  force pushes. Pushes, merges and PR creation run without a prompt (mv7-keyboard-mute-ipz.15); merging a PR is
+  still the maintainer's call (docs/SDLC.md), and the guard hook and git hooks still apply.
 - Hooks: `guard-bash.sh` (PreToolUse: blocks bare `bv`, publishing, upstream writes, tag pushes, hook bypass, commits
   without the privacy setup, `gh pr create` aimed at the parent repo), `rustfmt-on-edit.sh` (PostToolUse),
   `session-start.sh` (branch, privacy-setup warning, `br ready`).
