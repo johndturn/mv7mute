@@ -62,7 +62,7 @@ mv7mute-core/src/lib.rs       # Command enum, run(), lock-restore wrapper (with_
 mv7mute-core/src/tests/       # Mock transport tests: command_contract.rs, failure_paths.rs, support.rs
 mv7mute/src/main.rs           # clap CLI: toggle (default) | on | off | status | lock | unlock | version
 mv7mute-tray/                 # Upstream tray app (unused here)
-.github/workflows/ci.yml      # Upstream CI: cargo test + clippy on Linux and Windows (macOS dropped: no runner; release workflows removed)
+.github/workflows/ci.yml      # Lint only: fmt + clippy (CLI crates) on Linux, PRs touching Rust/Cargo files; tests/builds are local
 docs/security-review.md       # Baseline review of upstream 5fb02cb: findings and dependency baseline
 docs/SDLC.md                  # The development loop (referenced below)
 scripts/setup-dev.sh          # One-time clone setup: beads filter, git hooks, remotes, gh default repo
@@ -92,14 +92,15 @@ Source: [schlarpc/shure-mv7-firmware-re](https://github.com/schlarpc/shure-mv7-f
 | --- | --- |
 | `scripts/setup-dev.sh` | One-time per clone: filter, hooks, remotes, `gh` default repo |
 | `cargo fmt -p mv7mute-core -p mv7mute` | Format the crates we own (upstream's tray is not rustfmt-clean; leave it) (a PostToolUse hook also runs rustfmt on every edited `.rs` file) |
-| `cargo clippy --workspace --all-targets --locked -- -D warnings` | Lint, warnings are errors (as in CI) |
+| `cargo clippy --workspace --all-targets --locked -- -D warnings` | Lint, warnings are errors (CI runs the same on the CLI crates only) |
 | `cargo test --workspace --locked` | Unit tests (mock transport; never touches hardware) |
 | `cargo build --release --locked -p mv7mute` | Build only the CLI |
 | `cargo tree -p mv7mute --locked -e normal,build` | CLI dependency tree |
 | `scripts/privacy-scan.sh --staged\|--outgoing\|--tree` | Personal-data scan |
 
-Always pass `--locked`. On a fresh macOS clone the workspace builds without extra system packages (Linux CI needs
-`libudev-dev`, `libgtk-3-dev`, `libxdo-dev` for the tray).
+Always pass `--locked`. On a fresh macOS clone the workspace builds without extra system packages. GitHub Actions
+runs lint only (fmt + clippy on Linux, PRs that touch Rust/Cargo files; needs `libudev-dev`); all tests and builds
+are local, to keep Actions minutes near zero.
 
 **Definition of done** for any code change: fmt check, clippy, tests and the locked release build pass, the privacy
 scan is clean, and `git status` shows only intended changes. Behaviour changes to what is sent to the device also

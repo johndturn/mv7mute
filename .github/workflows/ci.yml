@@ -1,37 +1,41 @@
 name: CI
 
+# Fork: lint and static analysis only, to keep Actions minutes near zero.
+# Tests and builds run locally via /verify (docs/SDLC.md); the mic is only used on macOS.
+# Runs only on PRs that touch Rust or Cargo files.
+
 on:
-  push:
-    branches:
-      - main
   pull_request:
+    paths:
+      - "**/*.rs"
+      - "**/Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/ci.yml"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        # Fork: no macOS runner (hosted macOS jobs are not picked up on this account).
-        # macOS is covered locally by /verify (docs/SDLC.md).
-        os:
-          - ubuntu-latest
-          - windows-latest
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
+      # hidapi links libudev on Linux. The tray's GTK deps are not needed: clippy covers only the crates we own.
       - name: Install Linux system dependencies
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install --yes pkg-config libudev-dev libgtk-3-dev libxdo-dev
+        run: sudo apt-get update && sudo apt-get install --yes pkg-config libudev-dev
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
         with:
           toolchain: stable
+          components: clippy, rustfmt
 
-      - name: Run tests
-        run: cargo test
+      - name: Check formatting
+        run: cargo fmt -p mv7mute-core -p mv7mute -- --check
 
       - name: Run clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+        run: cargo clippy -p mv7mute-core -p mv7mute --all-targets --locked -- -D warnings
