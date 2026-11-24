@@ -31,7 +31,7 @@ fixed ASCII commands, reads `name=value` replies, prints one or two words, and e
 
 ## Dependencies (CLI path)
 
-23 crates, all from crates.io with checksums in `Cargo.lock`. Build-time code:
+24 crates (macOS host target), all from crates.io with checksums in `Cargo.lock`. Build-time code:
 
 - `hidapi 2.6.5` `build.rs`: on macOS compiles the vendored `etc/hidapi/mac/hid.c` with `cc` and links IOKit,
   CoreFoundation and AppKit. No downloads.

@@ -12,3 +12,8 @@ categories = ["hardware-support"]
 
 [dependencies]
 hidapi = "2.6.5"
+
+# macOS: open the MV7 shared instead of seizing it (hidapi defaults to exclusive), so other apps
+# using the mic's HID interface keep working. Keep the version in sync with the line above.
+[target.'cfg(target_os = "macos")'.dependencies]
+hidapi = { version = "2.6.5", features = ["macos-shared-device"] }

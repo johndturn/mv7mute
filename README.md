@@ -130,7 +130,7 @@ mv7mute/
 | Issue                       | Mitigation                                                      |
 | --------------------------- | --------------------------------------------------------------- |
 | Wake-from-sleep resets mute | Re-query state on every invocation — never assume               |
-| HID exclusive access        | `hidapi` on Windows uses shared access; coexists with MOTIV app |
+| HID exclusive access        | Shared access on Windows (`hidapi` default) and on macOS (`macos-shared-device` feature); coexists with MOTIV Mix (checked on macOS) |
 | Kernel driver detach        | Not needed on Windows — native HID driver works directly        |
 | Linux HID permissions       | Add a udev rule granting access to the MV7 HID interface        |
 | macOS HID permissions       | No extra setup needed; `hidapi` uses IOHIDManager               |
