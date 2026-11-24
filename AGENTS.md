@@ -52,7 +52,9 @@ memory or start the bootloader. Rules:
 - **The binary only runs with the maintainer present.** Agents don't run `./target/*/mv7mute`, `cargo run` or the
   installed `mv7mute` (except `mv7mute version`) outside a hardware test (`/hw-test`). Settings put these behind a
   permission prompt. At most ~10 toggles in a row.
-- Tests use the mock `Transport` (`mv7mute-core/src/tests/support.rs`), which records every command sent.
+- Tests use the mock `Transport` (`mv7mute-core/src/tests/support.rs`), which records every command sent. One
+  exception: the macOS-only `hid_open_mode.rs` calls `HidApi::new()`, which enumerates HID devices (as every CLI run
+  does) to check the shared-open flag; it never opens a device or sends anything.
 
 ## Repository map
 
