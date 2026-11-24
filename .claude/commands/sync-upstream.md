@@ -10,6 +10,8 @@ Bring upstream changes into the fork safely (docs/SDLC.md, "Upstream syncs").
 3. With my OK: `git switch main && git pull --ff-only origin main && git switch -c chore/sync-upstream-<yyyy-mm-dd>`,
    then `git merge --no-ff upstream/main`. Never rebase main.
    - Conflicts on `.github/workflows/release*.yml` (deleted here): keep the deletion.
+   - `.github/workflows/ci.yml`: keep macOS out of the matrix (hosted macOS runners don't pick up jobs on this
+     account); take upstream's other changes.
    - Conflicts in `mv7mute-core/src/mv7.rs` or `Cargo.toml`: keep our fixes (no `bootDSP C`; hidapi
      `macos-shared-device` on macOS) and explain each resolution.
 4. Run /verify. Open a PR into the fork's main (`gh pr create --repo johndturn/mv7mute --base main`) with the

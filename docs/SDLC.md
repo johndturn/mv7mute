@@ -27,7 +27,8 @@ public repo.
    Include `.beads/issues.jsonl` changes on the same branch (`br sync --flush-only && git add .beads/`).
 8. **PR into the fork.** `git push -u origin HEAD`, then
    `gh pr create --repo johndturn/mv7mute --base main` (for a fork, gh otherwise targets the parent repo).
-   Body: summary, verification output, hardware notes, beads IDs. CI (`ci.yml`) runs on the PR.
+   Body: summary, verification output, hardware notes, beads IDs. CI (`ci.yml`) runs on the PR on Linux and
+   Windows only; macOS is covered by the local `/verify` run, so include its output.
 9. **Close and merge.** `br close <id> --reason "..."` on the branch, flush and commit `.beads/`, push. The
    maintainer merges (`gh pr merge --merge`); then delete the branch locally and on origin, and
    `git switch main && git pull --ff-only`.

@@ -12,9 +12,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Fork: no macOS runner (hosted macOS jobs are not picked up on this account).
+        # macOS is covered locally by /verify (docs/SDLC.md).
         os:
           - ubuntu-latest
-          - macos-26
           - windows-latest
     steps:
       - name: Checkout repository

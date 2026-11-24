@@ -62,7 +62,7 @@ mv7mute-core/src/lib.rs       # Command enum, run(), lock-restore wrapper (with_
 mv7mute-core/src/tests/       # Mock transport tests: command_contract.rs, failure_paths.rs, support.rs
 mv7mute/src/main.rs           # clap CLI: toggle (default) | on | off | status | lock | unlock | version
 mv7mute-tray/                 # Upstream tray app (unused here)
-.github/workflows/ci.yml      # Upstream CI: cargo test + clippy on Linux, macOS, Windows (release workflows removed)
+.github/workflows/ci.yml      # Upstream CI: cargo test + clippy on Linux and Windows (macOS dropped: no runner; release workflows removed)
 docs/security-review.md       # Baseline review of upstream 5fb02cb: findings and dependency baseline
 docs/SDLC.md                  # The development loop (referenced below)
 scripts/setup-dev.sh          # One-time clone setup: beads filter, git hooks, remotes, gh default repo
