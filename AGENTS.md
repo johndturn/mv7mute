@@ -150,8 +150,18 @@ GitHub MCP is configured.
 
 ## Local install
 
-Not installed yet (mv7-keyboard-mute-ipz.4). When it is, record here: install path (written with `~`), the fork
-commit it was built from, and the build command.
+Update this whenever the installed binary changes (mv7-keyboard-mute-ipz.4).
+
+- **Path:** `~/.local/bin/mv7mute` (on PATH; Raycast must call it by this absolute path).
+- **Built from:** fork `main` at `53ba1f3` (includes the bootDSP and macOS shared-open fixes), clean tree.
+- **Build and install:**
+  ```bash
+  cargo build --release --locked -p mv7mute
+  install -m 0755 target/release/mv7mute ~/.local/bin/mv7mute
+  ```
+- **Check:** `mv7mute --version` prints `mv7mute 0.1.3`. (`mv7mute version` prints the core crate's `0.1.1`, an
+  upstream quirk tracked in mv7-keyboard-mute-ipz.16.) arm64; SHA-256 of the build:
+  `b7a17b4880d20819c9f0a85e7497d122c33bb354c067e7088f4d0974933ba7ac`.
 
 ## Issue tracking with br (beads_rust) and bv (beads_viewer)
 
