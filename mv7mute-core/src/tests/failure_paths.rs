@@ -6,12 +6,7 @@ use crate::{Command, run_with_mv7};
 fn toggle_read_failure_still_attempts_relock() {
     let (result, state) = run_scripted(
         Command::Toggle,
-        vec![
-            Ok(Some("su=adm")),
-            Ok(Some("dspBooted")),
-            Ok(Some("lock=on")),
-            Err("read failed"),
-        ],
+        vec![Ok(Some("su=adm")), Ok(Some("lock=on")), Err("read failed")],
     );
 
     assert_eq!(result.unwrap_err(), "read failed");
@@ -25,7 +20,6 @@ fn toggle_read_failure_still_attempts_relock() {
 fn toggle_write_failure_still_attempts_relock() {
     let (transport, state) = FakeTransport::scripted(vec![
         Ok(Some("su=adm")),
-        Ok(Some("dspBooted")),
         Ok(Some("lock=on")),
         Ok(Some("micMute=off")),
     ]);
@@ -48,7 +42,6 @@ fn toggle_write_failure_still_attempts_relock() {
 fn relock_failure_is_reported_as_command_failure() {
     let (transport, state) = FakeTransport::scripted(vec![
         Ok(Some("su=adm")),
-        Ok(Some("dspBooted")),
         Ok(Some("lock=on")),
         Ok(Some("micMute=off")),
     ]);
@@ -67,7 +60,6 @@ fn relock_failure_is_reported_as_command_failure() {
 fn command_and_relock_failures_are_both_reported() {
     let (transport, state) = FakeTransport::scripted(vec![
         Ok(Some("su=adm")),
-        Ok(Some("dspBooted")),
         Ok(Some("lock=on")),
         Ok(Some("micMute=off")),
     ]);
