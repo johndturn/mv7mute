@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Installed by scripts/setup-dev.sh (core.hooksPath=.githooks).
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+remote_name="${1:-}"
+if [ "$remote_name" = "upstream" ]; then
+  echo "pre-push: pushing to upstream (Justkant/mv7mute) is not allowed from this clone." >&2
+  exit 1
+fi
+# Refuse release tags: upstream's release tooling keys off v* tags.
+while read -r local_ref _ remote_ref _; do
+  case "$remote_ref" in
+    refs/tags/v*) echo "pre-push: refusing to push release tag ${remote_ref#refs/tags/} (see AGENTS.md)." >&2; exit 1 ;;
+  esac
+  : "$local_ref"
+done
+exec "$root/scripts/privacy-scan.sh" --outgoing

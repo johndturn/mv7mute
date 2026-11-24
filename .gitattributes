@@ -1,0 +1,2 @@
+# Strip br's absolute workspace path on stage (filter defined by scripts/setup-dev.sh).
+.beads/issues.jsonl filter=beads-scrub
