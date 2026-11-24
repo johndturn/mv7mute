@@ -45,10 +45,11 @@ The MV7's HID console has no authentication: `su sup` grants factory level, and 
 memory or start the bootloader. Rules:
 
 - **Allowlist.** Code in this repo may send only: `su adm`, `lock`, `lock on`, `lock off`, `micMute`,
-  `micMute on`, `micMute off`. Anything else needs the maintainer's approval recorded on a beads issue.
-- **Never send** `bootLoad`, `update`, `setEE`, `setDSP`, `setBlock`, `setSN`, `setSAPSN`, `dspPower`, `disableUI`,
-  `su sup`, or `getBlock` with a long argument (a 114+ character argument overflows the firmware's stack).
-  `bootDSP` is being removed (finding 1 in `docs/security-review.md`).
+  `micMute on`, `micMute off`. Anything else needs the maintainer's approval recorded on a beads issue. The test
+  `every_path_sends_only_allowlisted_commands` (`mv7mute-core/src/tests/command_contract.rs`) enforces this.
+- **Never send** `bootLoad`, `bootDSP`, `update`, `setEE`, `setDSP`, `setBlock`, `setSN`, `setSAPSN`, `dspPower`,
+  `disableUI`, `su sup`, or `getBlock` with a long argument (a 114+ character argument overflows the firmware's
+  stack). `bootDSP` was removed from init in mv7-keyboard-mute-ipz.1 (finding 1 in `docs/security-review.md`).
 - **The binary only runs with the maintainer present.** Agents don't run `./target/*/mv7mute`, `cargo run` or the
   installed `mv7mute` (except `mv7mute version`) outside a hardware test (`/hw-test`). Settings put these behind a
   permission prompt. At most ~10 toggles in a row.
@@ -124,8 +125,9 @@ Author email must be a GitHub noreply address.
 ## Claude Code setup (`.claude/`)
 
 - `settings.json`: allows build/test/lint, `br`, `bv --robot-*`, read-only git/gh; **asks** before running the
-  binary, `cargo run`/`install`, pushes, merges, PR creation and `gh workflow`/`gh repo`; **denies**
-  `cargo publish`, pushes to `upstream`, force pushes.
+  binary, `cargo run`/`install` and `gh workflow`/`gh repo`; **denies** `cargo publish`, pushes to `upstream`,
+  force pushes. Pushes, merges and PR creation run without a prompt (mv7-keyboard-mute-ipz.15); merging a PR is
+  still the maintainer's call (docs/SDLC.md), and the guard hook and git hooks still apply.
 - Hooks: `guard-bash.sh` (PreToolUse: blocks bare `bv`, publishing, upstream writes, tag pushes, hook bypass, commits
   without the privacy setup, `gh pr create` aimed at the parent repo), `rustfmt-on-edit.sh` (PostToolUse),
   `session-start.sh` (branch, privacy-setup warning, `br ready`).

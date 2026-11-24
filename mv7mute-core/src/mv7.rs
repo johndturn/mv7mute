@@ -86,8 +86,6 @@ impl<T: Transport> Mv7<T> {
     pub fn init(&mut self) -> Result<(), String> {
         self.send("su adm")?;
         self.wait_for("su=adm", Duration::from_secs(3))?;
-        self.send("bootDSP C")?;
-        self.wait_for("dspBooted", Duration::from_secs(5))?;
         self.was_locked = self.get_lock()?;
         self.restore_lock_armed = self.was_locked;
         if self.was_locked {
