@@ -75,11 +75,12 @@ Communication uses the MV7's USB HID text protocol over interface `3` (64-byte r
 
 1. Open the HID device (VID `0x14ED`, PID `0x1012`, interface `3`)
 2. Authenticate: send `su adm`, wait for `su=adm`
-3. Boot DSP: send `bootDSP C`, wait for `dspBooted`
-4. Query lock state (`lock`); if locked, send `lock off`
-5. Execute the requested command
-6. Re-lock if the device was originally locked (`lock on`)
-7. Close the device
+3. Query lock state (`lock`); if locked, send `lock off`
+4. Execute the requested command
+5. Re-lock if the device was originally locked (`lock on`)
+6. Close the device
+
+The DSP is not restarted (`bootDSP`) on each run: restarting it could cause an audible dropout or reset DSP settings made in MOTIV Mix, and `micMute` only needs privilege level `nor`.
 
 No driver swap (Zadig/WinUSB) is required — the native Windows HID driver works directly.
 
@@ -88,7 +89,6 @@ No driver swap (Zadig/WinUSB) is required — the native Windows HID driver work
 | Step         | Command sent  | Expected response             |
 | ------------ | ------------- | ----------------------------- |
 | Authenticate | `su adm`      | `su=adm`                      |
-| Boot DSP     | `bootDSP C`   | `dspBooted`                   |
 | Query lock   | `lock`        | `lock=on` or `lock=off`       |
 | Lock         | `lock on`     | —                             |
 | Unlock       | `lock off`    | —                             |
@@ -132,7 +132,6 @@ mv7mute/
 | Wake-from-sleep resets mute | Re-query state on every invocation — never assume               |
 | HID exclusive access        | `hidapi` on Windows uses shared access; coexists with MOTIV app |
 | Kernel driver detach        | Not needed on Windows — native HID driver works directly        |
-| DSP boot overhead           | ~500 ms per invocation; acceptable for a hotkey                 |
 | Linux HID permissions       | Add a udev rule granting access to the MV7 HID interface        |
 | macOS HID permissions       | No extra setup needed; `hidapi` uses IOHIDManager               |
 
