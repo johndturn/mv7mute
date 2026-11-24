@@ -1,1 +1,8 @@
 /target
+
+# Local agent and editor state
+.claude/settings.local.json
+.claude/*.local.*
+CLAUDE.local.md
+.env
+.env.*

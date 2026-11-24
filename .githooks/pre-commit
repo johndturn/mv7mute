@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Installed by scripts/setup-dev.sh (core.hooksPath=.githooks).
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+if [ -z "$(git config filter.beads-scrub.clean || true)" ]; then
+  echo "pre-commit: beads-scrub filter not configured. Run scripts/setup-dev.sh first." >&2
+  exit 1
+fi
+exec "$root/scripts/privacy-scan.sh" --staged
