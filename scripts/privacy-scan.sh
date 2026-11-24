@@ -15,8 +15,10 @@ mode="${1:---staged}"
 cd "$(git rev-parse --show-toplevel)"
 
 # Patterns that indicate personal data. Extended regex, case-insensitive.
+# SC1003: the Windows pattern's backslashes are regex escapes, not an attempt to escape a quote.
+# shellcheck disable=SC1003
 patterns=(
-  '/Users/[A-Za-z0-9._-]+'                       # macOS home paths
+  '/Users/[A-Za-z0-9._-]+'                     # macOS home paths
   '/home/[A-Za-z0-9._-]+'                        # Linux home paths
   'C:\\\\Users\\\\'                              # Windows home paths
   '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' # email addresses (allowlist below)

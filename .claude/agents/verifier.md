@@ -15,6 +15,8 @@ cargo build --release --locked -p mv7mute
 scripts/privacy-scan.sh --staged
 scripts/privacy-scan.sh --outgoing
 command -v cargo-audit >/dev/null && cargo audit || echo "cargo-audit not installed (see beads)"
+shellcheck .claude/hooks/*.sh .githooks/* scripts/*.sh integrations/raycast/*.sh
+integrations/raycast/test.sh
 git status --short
 ```
 

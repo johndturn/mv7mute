@@ -71,7 +71,7 @@ docs/SDLC.md                  # The development loop (referenced below)
 scripts/setup-dev.sh          # One-time clone setup: beads filter, git hooks, remotes, gh default repo
 scripts/privacy-scan.sh       # Personal-data scanner used by the git hooks and /privacy-check
 .githooks/                    # pre-commit, pre-push
-integrations/raycast/         # Raycast script command (created by mv7-keyboard-mute-ipz.5)
+integrations/raycast/         # Raycast script command (Hyper+M -> mv7mute toggle), README with setup, stub-based test.sh
 .beads/                       # beads_rust issues (issues.jsonl tracked; DB gitignored)
 .claude/                      # settings.json, hooks/, agents/, commands/
 ```
@@ -100,13 +100,15 @@ Source: [schlarpc/shure-mv7-firmware-re](https://github.com/schlarpc/shure-mv7-f
 | `cargo build --release --locked -p mv7mute` | Build only the CLI |
 | `cargo tree -p mv7mute --locked -e normal,build` | CLI dependency tree |
 | `scripts/privacy-scan.sh --staged\|--outgoing\|--tree` | Personal-data scan |
+| `shellcheck .claude/hooks/*.sh .githooks/* scripts/*.sh integrations/raycast/*.sh` | Lint the shell scripts |
+| `integrations/raycast/test.sh` | Raycast script tests (stub binaries; never touches the mic) |
 
 Always pass `--locked`. On a fresh macOS clone the workspace builds without extra system packages. GitHub Actions
 runs lint only (fmt + clippy on Linux, PRs that touch Rust/Cargo files; needs `libudev-dev`); all tests and builds
 are local, to keep Actions minutes near zero.
 
 **Definition of done** for any code change: fmt check, clippy, tests and the locked release build pass, the privacy
-scan is clean, and `git status` shows only intended changes. Behaviour changes to what is sent to the device also
+scan is clean, shellcheck and `integrations/raycast/test.sh` pass, and `git status` shows only intended changes. Behaviour changes to what is sent to the device also
 need a hardware check (`/hw-test`).
 
 ## Development workflow
