@@ -1,5 +1,5 @@
 ---
-description: Run the definition-of-done checks (fmt, clippy, tests, locked build, privacy scan)
+description: Run the definition-of-done checks (fmt, clippy, tests, locked build, privacy scan, shellcheck)
 ---
 
 Run the definition of done from AGENTS.md and report a pass/fail table. Do not run the binary against the mic.
@@ -11,6 +11,8 @@ cargo test --workspace --locked
 cargo build --release --locked -p mv7mute
 scripts/privacy-scan.sh --staged && scripts/privacy-scan.sh --outgoing
 command -v cargo-audit >/dev/null && cargo audit || echo "cargo-audit not installed"
+shellcheck .claude/hooks/*.sh .githooks/* scripts/*.sh integrations/raycast/*.sh
+integrations/raycast/test.sh
 git status --short
 ```
 
